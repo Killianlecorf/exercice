@@ -7,14 +7,14 @@ interface StopwatchProps {
 const Stopwatch = ({ onPauseChange }: StopwatchProps) => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    onPauseChange(isPaused);
+    onPauseChange(!isRunning);
 
-    if (isPaused) return;
+    if (!isRunning) return;
 
-    const start = startTime ?? Date.now() - elapsedTime;
+    const start = Date.now() - elapsedTime;
     setStartTime(start);
 
     const interval = setInterval(() => {
@@ -22,17 +22,17 @@ const Stopwatch = ({ onPauseChange }: StopwatchProps) => {
     }, 10);
 
     return () => clearInterval(interval);
-  }, [isPaused, startTime, onPauseChange]);
+  }, [isRunning]);
 
   const togglePause = () => {
-    setIsPaused((prev) => !prev);
+    setIsRunning((prev) => !prev);
   };
 
   return (
     <div>
       <h2>Chrono: {(elapsedTime / 1000).toFixed(3)} s</h2>
       <button onClick={togglePause}>
-        {isPaused ? "Reprendre" : "Pause"}
+        {isRunning ? "Pause" : "Reprendre"}
       </button>
     </div>
   );
