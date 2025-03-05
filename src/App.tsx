@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Compteur from "./components/Compteur";
+import Profil from "./components/Profil";
+import Stopwatch from "./components/Stopwatch";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [profils, setProfils] = useState<number[]>([]);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const ajouterProfil = () => {
+    setProfils([...profils, profils.length]);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Mes compteurs</h1>
+      <Compteur valeurInitiale={10} pas={1} />
+      <Compteur valeurInitiale={50} pas={5} />
 
-export default App
+      <h1>Profils</h1>
+      <button onClick={ajouterProfil}>Ajouter un profil</button>
+      {profils.map((id) => (
+        <Profil key={id} />
+      ))}
+
+
+      <h1>Stopwatch App</h1>
+      <p>Le chrono est {isPaused ? "en pause" : "en cours"}</p>
+      <Stopwatch onPauseChange={setIsPaused} />
+    </div>
+  );
+};
+
+export default App;
